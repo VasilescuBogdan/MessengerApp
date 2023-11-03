@@ -1,5 +1,9 @@
 spring:
     data:
         mongodb:
-            uri: mongodb+srv://${env.MONGO_USER}:<${env.MONGO_PASSWORD}>@${env.MONGO_CLUSTER}/?retryWrites=true&w=majority
-            database: ${env.MONGO_DATABASE}
+            host: localhost
+            port: 27017
+            database: messenger_db
+token:
+    signing:
+        key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
