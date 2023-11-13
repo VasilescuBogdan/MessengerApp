@@ -6,26 +6,26 @@ import ace.ucv.messenger.dto.SignUpRequest;
 import ace.ucv.messenger.entity.User;
 import ace.ucv.messenger.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(authenticationService.signUp(request));
+    @ResponseStatus(HttpStatus.CREATED)
+    public User signup(@RequestBody SignUpRequest request) {
+        return authenticationService.signUp(request);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<SignInResponse> signup(@RequestBody SignInRequest request) {
-        return ResponseEntity.ok(authenticationService.signIn(request));
+    @ResponseStatus(HttpStatus.OK)
+    public SignInResponse signin(@RequestBody SignInRequest request) {
+        return authenticationService.signIn(request);
     }
 }

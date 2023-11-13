@@ -1,0 +1,6 @@
+<div *ngIf="!isLoggedIn()">
+  <app-login-register></app-login-register>
+</div>
+<div *ngIf="isLoggedIn()">
+  <app-headder></app-headder>
+</div>

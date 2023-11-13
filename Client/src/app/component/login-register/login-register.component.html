@@ -1,0 +1,19 @@
+<div class="flex justify-center items-center h-screen">
+  <div class="w-96 p-6 bg-gray-700 rounded-md">
+    <form [formGroup]="loginForm">
+        <h2 class="text-center text-2xl font-bold leading-9 tracking-light text-pink-700">Login</h2>
+        <div class="text-xl box-content">
+          <mat-form-field class="text-black w-full mt-5">
+            <mat-label>Email address</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <mat-form-field class="text-black w-full">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="w-full" (click)="login()">Login</button>
+        </div>
+    </form>
+  </div>
+</div>
+
