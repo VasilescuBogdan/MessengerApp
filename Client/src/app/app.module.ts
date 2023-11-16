@@ -12,12 +12,19 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HeadderComponent} from './component/headder/headder.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
+import { SidenavComponent } from './component/sidenav/sidenav.component';
+import { ChatComponent } from './component/chat/chat.component';
+import { SettingsComponent } from './component/settings/settings.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginRegisterComponent,
-    HeadderComponent
+    HeadderComponent,
+    SidenavComponent,
+    ChatComponent,
+    SettingsComponent
   ],
   imports: [
     HttpClientModule,
@@ -27,7 +34,8 @@ import {MatIconModule} from "@angular/material/icon";
     MatInputModule,
     MatButtonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatSidenavModule
   ],
   providers: [
     AuthService,

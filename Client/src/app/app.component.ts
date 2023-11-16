@@ -12,7 +12,6 @@ export class AppComponent {
   }
 
   isLoggedIn() {
-    console.log(this.authService.isLoggedIn());
     return this.authService.isLoggedIn();
   }
 }

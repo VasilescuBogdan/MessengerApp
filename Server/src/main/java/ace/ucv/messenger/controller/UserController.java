@@ -1,8 +1,8 @@
 package ace.ucv.messenger.controller;
 
-import ace.ucv.messenger.dto.SignInRequest;
-import ace.ucv.messenger.dto.SignInResponse;
-import ace.ucv.messenger.dto.SignUpRequest;
+import ace.ucv.messenger.dto.LoginRequest;
+import ace.ucv.messenger.dto.LoginResponse;
+import ace.ucv.messenger.dto.RegisterRequest;
 import ace.ucv.messenger.entity.User;
 import ace.ucv.messenger.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public User signup(@RequestBody SignUpRequest request) {
-        return authenticationService.signUp(request);
+    public void signup(@RequestBody RegisterRequest request) {
+        authenticationService.signUp(request);
     }
 
     @PostMapping("/signin")
     @ResponseStatus(HttpStatus.OK)
-    public SignInResponse signin(@RequestBody SignInRequest request) {
+    public LoginResponse signin(@RequestBody LoginRequest request) {
         return authenticationService.signIn(request);
     }
 }

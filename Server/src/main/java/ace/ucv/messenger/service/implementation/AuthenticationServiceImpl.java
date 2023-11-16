@@ -1,9 +1,10 @@
 package ace.ucv.messenger.service.implementation;
 
-import ace.ucv.messenger.dto.SignInRequest;
-import ace.ucv.messenger.dto.SignInResponse;
-import ace.ucv.messenger.dto.SignUpRequest;
+import ace.ucv.messenger.dto.LoginRequest;
+import ace.ucv.messenger.dto.LoginResponse;
+import ace.ucv.messenger.dto.RegisterRequest;
 import ace.ucv.messenger.entity.User;
+import ace.ucv.messenger.exceptions.UserNotFoundException;
 import ace.ucv.messenger.repository.UserRepository;
 import ace.ucv.messenger.service.AuthenticationService;
 import ace.ucv.messenger.service.JwtService;
@@ -26,22 +27,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public User signUp(SignUpRequest request) {
+    public void signUp(RegisterRequest request) {
         User user = User.builder()
-                .name(request.getName())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
-    public SignInResponse signIn(SignInRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        User user = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+    public LoginResponse signIn(LoginRequest request) {
+        User user = userRepository.findUserByEmailOrPhone(request.getCredential(), request.getCredential())
+                .orElseThrow(() -> new UserNotFoundException("User not in database"));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), request.getPassword()));
         String jwt = jwtService.generateToken(user);
-        return SignInResponse.builder().token(jwt).build();
+        return LoginResponse.builder().token(jwt).build();
     }
 }

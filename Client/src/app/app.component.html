@@ -3,4 +3,12 @@
 </div>
 <div *ngIf="isLoggedIn()">
   <app-headder></app-headder>
+  <mat-sidenav-container class="h-screen">
+    <mat-sidenav mode="side" opened class="w-1/5">
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <app-chat></app-chat>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
