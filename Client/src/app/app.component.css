@@ -2,6 +2,9 @@
   @apply bg-white text-white
 }
 
+mat-sidenav-container {
+  height: calc(100vh - 100px);
+}
 
 
 

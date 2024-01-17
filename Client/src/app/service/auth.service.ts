@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {LoginRequest} from "../dto/loginRequest.dto";
 import {LoginResponse} from "../dto/loginResponse.dto";
 import {RegisterRequest} from "../dto/registerRequest.dto";
@@ -14,16 +14,21 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(loginRequest: LoginRequest) {
-    return this.http.post<LoginResponse>(this.BASE_URL + 'signin', loginRequest);
+  public login(loginRequest: LoginRequest) {
+    return this.http.post<LoginResponse>(this.BASE_URL + 'signin', loginRequest, {headers: new HttpHeaders({"No-Auth": "True"})});
   }
 
-  setToken(jwtToken: string) {
+  public setTokenAndUsername(jwtToken: string, username: string) {
     localStorage.setItem('jwtToken', jwtToken);
+    localStorage.setItem('username', username);
   }
 
-  getToken() {
+  public getToken() {
     return localStorage.getItem('jwtToken') ?? '{}';
+  }
+
+  public getUsername() {
+    return localStorage.getItem('username') ?? '{}';
   }
 
   public clear() {
@@ -35,6 +40,6 @@ export class AuthService {
   }
 
   public register(registerRequest: RegisterRequest) {
-    return this.http.post(this.BASE_URL + 'signup', registerRequest);
+    return this.http.post(this.BASE_URL + 'signup', registerRequest, {headers: new HttpHeaders({"No-Auth": "True"})});
   }
 }

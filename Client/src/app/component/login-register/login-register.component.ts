@@ -34,7 +34,7 @@ export class LoginRegisterComponent {
             this.authService.login({credential: val.credential, password: val.password}).subscribe({
                 next: (response) => {
                     console.log(response);
-                    this.authService.setToken(response.token);
+                    this.authService.setTokenAndUsername(response.token, response.username);
                 },
                 error: (error) => {
                     console.log(error);

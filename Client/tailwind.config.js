@@ -7,7 +7,10 @@ module.exports = {
     extend: {
       colors: {
         'angular-primary': '#c2185b'
-      }
+      },
+      maxWidth: {
+        '70%': '70%'
+      },
     },
   },
   plugins: [],

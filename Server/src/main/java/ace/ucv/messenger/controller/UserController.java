@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/signin")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse signin(@RequestBody LoginRequest request) {
+    public LoginResponse signin(@RequestBody LoginRequest request) throws Exception {
         return authenticationService.signIn(request);
     }
 }

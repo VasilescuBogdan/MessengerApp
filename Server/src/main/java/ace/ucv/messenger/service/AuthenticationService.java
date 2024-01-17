@@ -9,5 +9,5 @@ public interface AuthenticationService {
 
     void signUp(RegisterRequest request);
 
-    LoginResponse signIn(LoginRequest request);
+    LoginResponse signIn(LoginRequest request) throws Exception;
 }
