@@ -5,10 +5,12 @@
     </div>
     <div class="border-t-white border"></div>
     <mat-list *ngFor="let chat of chats">
-      <mat-list-item mat-list-item [activated]="chat.isActive" (click)="showChat(chat)">
+      <mat-list-item mat-list-item (click)="showChat(chat)"
+                     [ngClass]="{'bg-gray-500': chat.id === chatRoom.id}"
+                     class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300">
         <div class="flex justify-normal">
           <div
-            class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl ">
+            class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
             {{ findSecondUser(chat).substring(0, 1).toUpperCase() }}
           </div>
           <p class="text-4xl mx-3">
@@ -26,19 +28,24 @@
         </div>
         <div class="border-t-white border"></div>
       </div>
-      <div class="m-3" *ngFor="let message of chatRoom.messages">
-        <div class="mb-2.5 p-2.5 rounded-lg" [ngClass]="{
-          'bg-gray float-right': message.senderUsername === username,
-          'bg-angular-primary float-left': message.senderUsername === chatRoom.secondUser
+      <div class="m-3" *ngFor="let group of chatRoom.messages | keyvalue">
+        <h2 class="flex justify-center">{{ group.key }}</h2>
+        <div *ngFor="let message of group.value" class="flex-row flex">
+          <div class="mb-2.5 p-2.5 rounded-lg mx-w-md" [ngClass]="{
+          'bg-gray-600 ml-auto': message.senderUsername === username,
+          'bg-angular-primary': message.senderUsername === chatRoom.secondUser
           }">
-          <p>{{ message.content }}</p>
-          <div class="text-xs text-slate-500 mt-1.5 text-right"> {{ message.date }} {{ message.time }}</div>
+            <p>{{ message.content }}</p>
+            <div
+              class="text-xs text-slate-500 mt-1.5 text-right"> {{ formatDateWithoutMillisecondsOrSeconds(message.time) }}
+            </div>
+          </div>
         </div>
       </div>
       <mat-form-field class="mt-auto w-full">
         <input [(ngModel)]="messageInput" matInput class="p-2" placeholder="Type your message...">
         <button (click)="sendMessage()" mat-icon-button class="p-2 ml-2" matSuffix>
-          <mat-icon> send </mat-icon>
+          <mat-icon>send</mat-icon>
         </button>
       </mat-form-field>
     </div>

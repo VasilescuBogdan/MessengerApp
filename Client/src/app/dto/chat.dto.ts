@@ -6,8 +6,8 @@ export interface MessageDto {
 }
 
 export interface ChatDto {
+  id: string;
   firstUser: string;
   secondUser: string;
   messages: MessageDto[];
-  isActive: boolean;
 }

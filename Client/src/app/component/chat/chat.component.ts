@@ -6,22 +6,24 @@ import {AuthService} from "../../service/auth.service";
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent implements OnInit {
 
   chats: ChatDto[] = [];
   username = '';
   chatRoom: {
+    id: string;
     secondUser: string;
-    messages: MessageDto[];
+    messages: { [key: string]: MessageDto[] };
   };
   messageInput = '';
 
   constructor(private chatService: ChatService, private authService: AuthService) {
     this.chatRoom = {
+      id: '',
       secondUser: '',
-      messages: [],
+      messages: {},
     }
   }
 
@@ -50,7 +52,7 @@ export class ChatComponent implements OnInit {
   }
 
   showChat(chat: ChatDto) {
-    this.chatRoom.messages = chat.messages;
+    this.chatRoom.messages = this.groupByDate(chat.messages);
     this.chatRoom.secondUser = this.findSecondUser(chat);
   }
 
@@ -63,7 +65,8 @@ export class ChatComponent implements OnInit {
       const message = this.messageInput;
       this.chatService.sendMessage(message, this.chatRoom.secondUser).subscribe({
         next: value => {
-          this.chatRoom.messages = value;
+          this.chatRoom.messages = this.groupByDate(value);
+          this.getAllChats();
         },
         error: err => {
           console.log(err);
@@ -71,5 +74,24 @@ export class ChatComponent implements OnInit {
       });
       this.messageInput = '';
     }
+  }
+
+  formatDateWithoutMillisecondsOrSeconds(time: String) {
+    const timeObj = new Date(`1970-01-01T${time}Z`)
+      return timeObj.toLocaleTimeString('de-DE', { hour: 'numeric', minute: 'numeric', });
+  }
+
+  private groupByDate(messages: MessageDto[]): { [key: string]: MessageDto[] } {
+    const grouped: { [key: string]: MessageDto[] } = {};
+
+    for (const message of messages) {
+      const dateKey = message.date.split('T')[0];
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey].push(message);
+    }
+
+    return grouped;
   }
 }
