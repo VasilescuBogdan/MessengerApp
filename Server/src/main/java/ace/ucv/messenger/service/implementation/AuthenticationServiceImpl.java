@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +32,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void signUp(RegisterRequest request) {
-        User newUser = User.builder().username(request.getUsername()).email(request.getEmail()).phone(request.getPhone()).password(passwordEncoder.encode(request.getPassword())).build();
+        User newUser = User.builder()
+                           .username(request.getUsername())
+                           .email(request.getEmail())
+                           .phone(request.getPhone())
+                           .password(passwordEncoder.encode(request.getPassword()))
+                           .build();
         try {
             for (User user : userRepository.findAll()) {
                 chatService.addChat(newUser.getUsername(), user.getUsername());
@@ -46,11 +49,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponse signIn(LoginRequest loginRequest) throws Exception {
+    public LoginResponse signIn(LoginRequest loginRequest) {
         String credential = loginRequest.getCredential();
         String password = loginRequest.getPassword();
         User user = userRepository.findUserByEmailOrPhone(credential, credential)
-                .orElseThrow(() -> new UserNotFoundException(""));
+                                  .orElseThrow(() -> new UserNotFoundException(""));
         String username = user.getUsername();
         authenticate(username, password);
 
@@ -60,13 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new LoginResponse(newGeneratedToken, username);
     }
 
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
+    private void authenticate(String username, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 }

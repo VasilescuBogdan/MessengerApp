@@ -3,7 +3,6 @@ package ace.ucv.messenger.service.implementation;
 import ace.ucv.messenger.entity.Chat;
 import ace.ucv.messenger.entity.Message;
 import ace.ucv.messenger.entity.User;
-import ace.ucv.messenger.exceptions.ChatNotFoundException;
 import ace.ucv.messenger.exceptions.UserNotFoundException;
 import ace.ucv.messenger.repository.ChatRepository;
 import ace.ucv.messenger.repository.UserRepository;
