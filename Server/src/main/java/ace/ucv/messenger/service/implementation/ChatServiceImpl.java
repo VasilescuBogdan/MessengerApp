@@ -2,10 +2,8 @@ package ace.ucv.messenger.service.implementation;
 
 import ace.ucv.messenger.entity.Chat;
 import ace.ucv.messenger.entity.Message;
-import ace.ucv.messenger.entity.User;
-import ace.ucv.messenger.exceptions.UserNotFoundException;
+import ace.ucv.messenger.exceptions.ChatNotFoundException;
 import ace.ucv.messenger.repository.ChatRepository;
-import ace.ucv.messenger.repository.UserRepository;
 import ace.ucv.messenger.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository chatRepository;
-    private final UserRepository userRepository;
 
     @Override
     public void addChat(String firstUser, String secondUser) {
@@ -33,23 +30,17 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Message> addMessage(String newMessageContent, String recipient, Principal principal) {
+    public List<Message> addMessage(String messageContent, String recipient, Principal principal) {
         String username = principal.getName();
-        List<String> listUsers = new ArrayList<>();
-        listUsers.add(recipient);
-        listUsers.add(username);
-        Chat chat = chatRepository.findByFirstUserInAndSecondUserIn(listUsers, listUsers);
-
-        User currentUser = userRepository.findUserByUsername(principal.getName()).orElseThrow(() -> new UserNotFoundException("User not found"));
-
+        Chat chat = getChat(recipient, username);
+        Message newMessage = Message.builder()
+                                    .content(messageContent)
+                                    .date(LocalDate.now())
+                                    .time(LocalTime.now())
+                                    .senderUsername(username)
+                                    .build();
         List<Message> messages = chat.getMessages();
-
-        Message message = new Message();
-        message.setContent(newMessageContent);
-        message.setTime(LocalTime.now());
-        message.setDate(LocalDate.now());
-        message.setSenderUsername(currentUser.getUsername());
-        messages.add(message);
+        messages.add(newMessage);
         chat.setMessages(messages);
         chatRepository.save(chat);
         return messages;
@@ -57,7 +48,15 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<Chat> findAllChats(Principal principal) {
-        return chatRepository.getChatsByFirstUserOrSecondUser(principal.getName(), principal.getName());
+        return chatRepository.getChatsOfUser(principal.getName());
+    }
+
+    private Chat getChat(String firstUser, String secondUser) {
+        List<String> listUsers = new ArrayList<>();
+        listUsers.add(firstUser);
+        listUsers.add(secondUser);
+        return chatRepository.getChatByParticipants(listUsers)
+                             .orElseThrow(ChatNotFoundException::new);
     }
 
 }

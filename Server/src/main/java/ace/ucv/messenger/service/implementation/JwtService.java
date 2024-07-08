@@ -4,7 +4,6 @@ import ace.ucv.messenger.entity.User;
 import ace.ucv.messenger.exceptions.UserNotFoundException;
 import ace.ucv.messenger.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;

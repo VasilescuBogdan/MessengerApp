@@ -52,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public LoginResponse signIn(LoginRequest loginRequest) {
         String credential = loginRequest.getCredential();
         String password = loginRequest.getPassword();
-        User user = userRepository.findUserByEmailOrPhone(credential, credential)
+        User user = userRepository.getUserByEmailOrPhone(credential)
                                   .orElseThrow(() -> new UserNotFoundException(""));
         String username = user.getUsername();
         authenticate(username, password);
