@@ -1,7 +1,8 @@
-package ace.ucv.messenger.security;
+package ace.ucv.messenger.jwt;
 
 import ace.ucv.messenger.service.implementation.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -40,12 +42,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT token");
+                log.error("Unable to get JWT token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT token is expired");
+                log.error("JWT token is expired");
             }
         } else {
-            System.out.println("JWT token does not start with Bearer");
+            log.error("JWT token does not start with Bearer");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

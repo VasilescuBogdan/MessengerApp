@@ -1,4 +1,4 @@
-package ace.ucv.messenger.security;
+package ace.ucv.messenger.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

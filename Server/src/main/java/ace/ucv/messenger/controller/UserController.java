@@ -3,7 +3,6 @@ package ace.ucv.messenger.controller;
 import ace.ucv.messenger.dto.LoginRequest;
 import ace.ucv.messenger.dto.LoginResponse;
 import ace.ucv.messenger.dto.RegisterRequest;
-import ace.ucv.messenger.entity.User;
 import ace.ucv.messenger.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,13 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signup(@RequestBody RegisterRequest request) {
+    public void signUp(@RequestBody RegisterRequest request) {
         authenticationService.signUp(request);
     }
 
     @PostMapping("/signin")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse signin(@RequestBody LoginRequest request) throws Exception {
+    public LoginResponse signIn(@RequestBody LoginRequest request) throws Exception {
         return authenticationService.signIn(request);
     }
 }

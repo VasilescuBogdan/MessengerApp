@@ -1,12 +1,14 @@
-package ace.ucv.messenger.security;
+package ace.ucv.messenger.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +17,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final Key SECRET_KEY = Jwts.SIG.HS512.key()
-                                                        .build();
-
+    @Value("${token.signing.key}")
+    private String secretKey;
     private static final int TOKEN_VALIDITY = 3600 * 5;
 
     public String getUsernameFromToken(String token) {
@@ -31,8 +32,13 @@ public class JwtUtil {
                    .subject(userDetails.getUsername())
                    .issuedAt(new Date(System.currentTimeMillis()))
                    .expiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
-                   .signWith(SECRET_KEY)
+                   .signWith(getSigningKey())
                    .compact();
+    }
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -47,7 +53,7 @@ public class JwtUtil {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-                   .verifyWith((SecretKey) SECRET_KEY)
+                   .verifyWith(getSigningKey())
                    .build()
                    .parseSignedClaims(token)
                    .getPayload();
