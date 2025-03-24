@@ -4,6 +4,7 @@ import ace.ucv.messenger.entity.Chat;
 import ace.ucv.messenger.entity.Message;
 import ace.ucv.messenger.exceptions.ChatNotFoundException;
 import ace.ucv.messenger.service.ChatService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ public class ChatController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/addMessage")
+    @SecurityRequirement(name = "Bearer Authentication")
     public List<Message> addMessage(@RequestParam String messageContent, @RequestParam String recipient, Principal principal) throws ChatNotFoundException {
         return chatService.addMessage(messageContent, recipient, principal);
     }

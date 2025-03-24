@@ -30,22 +30,28 @@ public class SecurityConfig {
     private final UserDetailsService jwtService;
 
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authConfiguration) throws Exception {
+    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authConfiguration)
+            throws Exception {
         return authConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors();
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/user/signin", "/api/user/signup").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf()
+            .disable()
+            .authorizeRequests()
+            .antMatchers("/api/user/signin", "/api/user/signup", "/swagger-ui/**", "/v3/api-docs/**",
+                    "/swagger-ui.html")
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
