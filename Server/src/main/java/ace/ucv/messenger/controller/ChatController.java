@@ -1,7 +1,7 @@
 package ace.ucv.messenger.controller;
 
+import ace.ucv.messenger.dto.AddMessageDto;
 import ace.ucv.messenger.entity.Chat;
-import ace.ucv.messenger.entity.Message;
 import ace.ucv.messenger.exceptions.ChatNotFoundException;
 import ace.ucv.messenger.service.ChatService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,12 +25,13 @@ public class ChatController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/addMessage")
     @SecurityRequirement(name = "Bearer Authentication")
-    public List<Message> addMessage(@RequestParam String messageContent, @RequestParam String recipient, Principal principal) throws ChatNotFoundException {
-        return chatService.addMessage(messageContent, recipient, principal);
+    public Chat addMessage(@RequestBody AddMessageDto addMessageDto, Principal principal) throws ChatNotFoundException {
+        return chatService.addMessage(addMessageDto, principal);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "Bearer Authentication")
     public List<Chat> getAllChats(Principal principal) {
         return chatService.findAllChats(principal);
     }

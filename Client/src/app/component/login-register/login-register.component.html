@@ -9,11 +9,14 @@
         </mat-form-field>
         <mat-form-field class="text-black w-full">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password">
+          <input matInput type="password" formControlName="password">
         </mat-form-field>
         <button mat-raised-button color="primary" class="w-full" (click)="login()">Login</button>
       </div>
-      <p class="mt-5 text-white" *ngIf="isLogin"> You are new? <span class="hover:underline font-semibold" (click)="switchLogin()"> Sign up now </span> </p>
+      <p class="mt-5 text-white" *ngIf="isLogin">
+        You are new?
+        <span class="hover:underline font-semibold" (click)="switchLogin()"> Sign up now </span>
+      </p>
     </form>
     <form *ngIf="!isLogin" [formGroup]="registerForm">
       <h2 class="text-center text-2xl font-bold leading-9 tracking-light text-angular-primary">Register</h2>
@@ -32,11 +35,13 @@
         </mat-form-field>
         <mat-form-field class="text-black w-full">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="newPassword">
+          <input matInput type="password" formControlName="newPassword">
         </mat-form-field>
         <button mat-raised-button color="primary" class="w-full" (click)="register()">Submit</button>
       </div>
-      <p class="mt-5 text-white" *ngIf="!isLogin"> Have an account already? <span class="hover:underline font-semibold" (click)="switchLogin()"> Try to log in </span> </p>
+      <p class="mt-5 text-white" *ngIf="!isLogin"> Have an account already? <span class="hover:underline font-semibold"
+                                                                                  (click)="switchLogin()"> Try to log in </span>
+      </p>
     </form>
   </div>
 </div>

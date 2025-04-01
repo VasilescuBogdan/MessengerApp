@@ -1,8 +1,8 @@
 package ace.ucv.messenger.service.implementation;
 
+import ace.ucv.messenger.dto.AddMessageDto;
 import ace.ucv.messenger.entity.Chat;
 import ace.ucv.messenger.entity.Message;
-import ace.ucv.messenger.exceptions.ChatNotFoundException;
 import ace.ucv.messenger.repository.ChatRepository;
 import ace.ucv.messenger.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +21,10 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
 
     @Override
-    public void addChat(String firstUser, String secondUser) {
-        Chat chat = new Chat();
-        chat.setMessages(new ArrayList<>());
-        chat.setFirstUser(firstUser);
-        chat.setSecondUser(secondUser);
-        chatRepository.save(chat);
-    }
-
-    @Override
-    public List<Message> addMessage(String messageContent, String recipient, Principal principal) {
+    public Chat addMessage(AddMessageDto addMessageDto, Principal principal) {
         String username = principal.getName();
+        String recipient = addMessageDto.recipient();
+        String messageContent = addMessageDto.content();
         Chat chat = getChat(recipient, username);
         Message newMessage = Message.builder()
                                     .content(messageContent)
@@ -42,8 +35,7 @@ public class ChatServiceImpl implements ChatService {
         List<Message> messages = chat.getMessages();
         messages.add(newMessage);
         chat.setMessages(messages);
-        chatRepository.save(chat);
-        return messages;
+        return chatRepository.save(chat);
     }
 
     @Override
@@ -56,7 +48,7 @@ public class ChatServiceImpl implements ChatService {
         listUsers.add(firstUser);
         listUsers.add(secondUser);
         return chatRepository.getChatByParticipants(listUsers)
-                             .orElseThrow(ChatNotFoundException::new);
+                             .orElse(new Chat(null, firstUser, secondUser, new ArrayList<>()));
     }
 
 }
