@@ -40,7 +40,7 @@
         </div>
         <div class="border-t-white border"></div>
       </div>
-      <div class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
+      <div #messageContainer class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
         <div class="m-2" *ngFor="let group of chatRoom.messages | keyvalue">
           <h2 class="flex justify-center">{{ group.key }}</h2>
           <div *ngFor="let message of group.value" class="flex-row flex">

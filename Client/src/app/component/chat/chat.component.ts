@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatDto, MessageDto } from "../../dto/chat.dto";
 import { ChatService } from "../../service/chat.service";
 import { AuthService } from "../../service/auth.service";
@@ -26,6 +26,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   users: string[] = [];
   stompClient: any = null;
   private notificationSubscription: any;
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
 
   constructor(private chatService: ChatService, private authService: AuthService, private userService: UserService) {
     this.chatRoom = {
@@ -54,6 +55,14 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  private scrollToBottom() {
+    try {
+      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll failed', err);
+    }
+  }
+
   private initWebSocket() {
     const ws = new SockJS('http://localhost:8080/ws');
     this.stompClient = new Client({
@@ -67,11 +76,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
 
-        // Subscribe to the user-specific chat URL
         const subUrl = `/users/${this.username}/chat`;
         this.notificationSubscription = this.stompClient.subscribe(subUrl, (message: { body: string; }) => {
-          console.log('Received message: ' + message.body);
-          const notification: NotificationDto = JSON.parse(message.body);  // Parse the notification message
+          const notification: NotificationDto = JSON.parse(message.body);
           this.handleNotification(notification);
         });
       },
@@ -91,9 +98,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   showChat(chat: ChatDto) {
-    this.chatRoom.id = chat.id;
-    this.chatRoom.messages = this.groupByDate(chat.messages);
-    this.chatRoom.secondUser = this.findSecondUser(chat);
+    if (this.chatRoom.id !== chat.id) {
+      this.chatRoom.id = chat.id;
+      this.chatRoom.messages = this.groupByDate(chat.messages);
+      this.chatRoom.secondUser = this.findSecondUser(chat);
+    }
   }
 
   userSelected() {
@@ -104,15 +113,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.messageInput !== '') {
       this.chatService.sendMessage({ content: this.messageInput, recipient: this.chatRoom.secondUser }).subscribe({
         next: value => {
-          this.chatRoom = {
-            id: value.id,
-            messages: this.groupByDate(value.messages),
-            secondUser: this.findSecondUser(value),
-          }
           const chat = this.chats.find(chat => chat.id === value.id);
           if (!chat) {
             this.chats.push(value);
+            this.chatRoom = {
+              id: value.id,
+              messages: this.groupByDate(value.messages),
+              secondUser: this.findSecondUser(value),
+            }
+          } else {
+            chat.messages = value.messages;
+            this.chatRoom.messages = this.groupByDate(chat.messages);
           }
+          this.scrollToBottom();
         },
         error: err => {
           console.log(err);
