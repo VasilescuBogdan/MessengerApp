@@ -20,6 +20,6 @@ public class Message {
 
     private LocalTime time;
 
-    private String senderUsername;
+    private String sender;
 
 }

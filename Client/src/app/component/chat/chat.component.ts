@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatDto, MessageDto } from "../../dto/chat.dto";
 import { ChatService } from "../../service/chat.service";
 import { AuthService } from "../../service/auth.service";
 import { UserService } from "../../service/user.service";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import SockJS from 'sockjs-client';
+import { NotificationDto } from "../../dto/notification.dto";
+import { Client } from "@stomp/stompjs";
 
 @Component({
   selector: 'app-chat',
@@ -11,7 +14,7 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
   styleUrls: ['./chat.component.css'],
   providers: [CdkTextareaAutosize],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   chats: ChatDto[] = [];
   username = '';
   chatRoom: {
@@ -21,6 +24,8 @@ export class ChatComponent implements OnInit {
   };
   messageInput = '';
   users: string[] = [];
+  stompClient: any = null;
+  private notificationSubscription: any;
 
   constructor(private chatService: ChatService, private authService: AuthService, private userService: UserService) {
     this.chatRoom = {
@@ -30,21 +35,51 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-    await this.getAllChats();
-    await this.loadNewUsers();
+  ngOnInit() {
     this.username = this.authService.getUsername();
+    this.initWebSocket();
+    this.getAllChats();
   }
 
-  private async getAllChats() {
+  private getAllChats() {
     this.chatService.getAllChat().subscribe({
       next: (data) => {
         this.chats = data;
+        console.log(this.chats);
+        this.loadNewUsers();
       },
       error: error => {
         console.log(error);
       }
     });
+  }
+
+  private initWebSocket() {
+    const ws = new SockJS('http://localhost:8080/ws');
+    this.stompClient = new Client({
+      webSocketFactory: () => ws,
+      connectHeaders: {
+        'Authorization': `Bearer ${this.authService.getToken()}`,
+      },
+      debug: (msg) => {
+        console.log(msg);
+      },
+      onConnect: (frame) => {
+        console.log('Connected: ' + frame);
+
+        // Subscribe to the user-specific chat URL
+        const subUrl = `/users/${this.username}/chat`;
+        this.notificationSubscription = this.stompClient.subscribe(subUrl, (message: { body: string; }) => {
+          console.log('Received message: ' + message.body);
+          const notification: NotificationDto = JSON.parse(message.body);  // Parse the notification message
+          this.handleNotification(notification);
+        });
+      },
+      onStompError: (frame) => {
+        console.error('STOMP Error: ' + frame);
+      }
+    });
+    this.stompClient.activate();
   }
 
   findSecondUser(chat: ChatDto) {
@@ -74,7 +109,10 @@ export class ChatComponent implements OnInit {
             messages: this.groupByDate(value.messages),
             secondUser: this.findSecondUser(value),
           }
-          this.getAllChats();
+          const chat = this.chats.find(chat => chat.id === value.id);
+          if (!chat) {
+            this.chats.push(value);
+          }
         },
         error: err => {
           console.log(err);
@@ -90,26 +128,30 @@ export class ChatComponent implements OnInit {
     this.chatRoom.secondUser = user;
   }
 
-  formatDateWithoutMillisecondsOrSeconds(time: String) {
-    const timeObj = new Date(`1970-01-01T${time}Z`)
-    return timeObj.toLocaleTimeString('de-DE', { hour: 'numeric', minute: 'numeric', });
+  timeWithoutMillisecondsOrSeconds(time: string[]) {
+    return `${time[0]}:${time[1]}`;
   }
 
   private groupByDate(messages: MessageDto[]): { [key: string]: MessageDto[] } {
     const grouped: { [key: string]: MessageDto[] } = {};
 
     for (const message of messages) {
-      const dateKey = message.date.split('T')[0];
+      const dateKey = String(message.date.slice().reverse()).replaceAll(',', '.');
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }
       grouped[dateKey].push(message);
     }
 
-    return grouped;
+    const sortedGrouped: { [key: string]: MessageDto[] } = {};
+    Object.keys(grouped).sort().forEach(key => {
+      sortedGrouped[key] = grouped[key];
+    });
+
+    return sortedGrouped;
   }
 
-  async loadNewUsers() {
+  loadNewUsers() {
     this.userService.getAllUsers().subscribe({
       next: value => {
         this.users = value.filter(user => {
@@ -124,5 +166,28 @@ export class ChatComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  private handleNotification(notification: NotificationDto) {
+    if (!notification) {
+      return;
+    }
+    const chat = this.chats.find(chat => chat.id === notification.chatId)
+    if (chat) {
+      chat.messages.push(notification.message);
+      if (this.chatRoom.id === chat.id) {
+        this.chatRoom.messages = this.groupByDate(chat.messages);
+      }
+    } else {
+      this.getAllChats();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.stompClient !== null) {
+      this.stompClient.disconnect();
+      this.notificationSubscription.unsubscribe();
+      this.stompClient = null;
+    }
   }
 }

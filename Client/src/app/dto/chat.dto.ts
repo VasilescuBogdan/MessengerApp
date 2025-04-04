@@ -1,8 +1,8 @@
 export interface MessageDto {
-  content: String;
-  date: String;
-  time: String;
-  senderUsername: String;
+  content: string;
+  date: string[];
+  time: string[];
+  sender: string;
 }
 
 export interface ChatDto {

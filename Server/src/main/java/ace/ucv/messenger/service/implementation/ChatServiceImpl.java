@@ -1,10 +1,12 @@
 package ace.ucv.messenger.service.implementation;
 
 import ace.ucv.messenger.dto.AddMessageDto;
+import ace.ucv.messenger.dto.Notification;
 import ace.ucv.messenger.entity.Chat;
 import ace.ucv.messenger.entity.Message;
 import ace.ucv.messenger.repository.ChatRepository;
 import ace.ucv.messenger.service.ChatService;
+import ace.ucv.messenger.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository chatRepository;
+    private final NotificationService notificationService;
 
     @Override
     public Chat addMessage(AddMessageDto addMessageDto, Principal principal) {
@@ -30,11 +33,16 @@ public class ChatServiceImpl implements ChatService {
                                     .content(messageContent)
                                     .date(LocalDate.now())
                                     .time(LocalTime.now())
-                                    .senderUsername(username)
+                                    .sender(username)
                                     .build();
         List<Message> messages = chat.getMessages();
         messages.add(newMessage);
         chat.setMessages(messages);
+        Notification notification = Notification.builder()
+                                                .chatId(chat.getId())
+                                                .message(newMessage)
+                                                .build();
+        notificationService.sendNotification(recipient, notification);
         return chatRepository.save(chat);
     }
 

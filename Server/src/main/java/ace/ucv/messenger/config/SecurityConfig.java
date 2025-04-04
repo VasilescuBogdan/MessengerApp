@@ -42,7 +42,7 @@ public class SecurityConfig {
             .disable()
             .authorizeRequests()
             .antMatchers("/api/user/signin", "/api/user/signup", "/swagger-ui/**", "/v3/api-docs/**",
-                    "/swagger-ui.html")
+                    "/swagger-ui.html", "/ws/**")
             .permitAll()
             .anyRequest()
             .authenticated()
@@ -72,5 +72,4 @@ public class SecurityConfig {
 
         return authProvider;
     }
-
 }

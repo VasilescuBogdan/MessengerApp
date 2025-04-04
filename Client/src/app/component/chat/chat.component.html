@@ -45,12 +45,12 @@
           <h2 class="flex justify-center">{{ group.key }}</h2>
           <div *ngFor="let message of group.value" class="flex-row flex">
             <div class="mb-2.5 p-2.5 rounded-lg mx-w-md" [ngClass]="{
-          'bg-gray-600 ml-auto': message.senderUsername === username,
-          'bg-angular-primary': message.senderUsername === chatRoom.secondUser
+          'bg-gray-600 ml-auto': message.sender === username,
+          'bg-angular-primary': message.sender === chatRoom.secondUser
           }">
               <p>{{ message.content }}</p>
               <div
-                class="text-xs text-gray-400 mt-1.5 text-right"> {{ formatDateWithoutMillisecondsOrSeconds(message.time) }}
+                class="text-xs text-gray-400 mt-1.5 text-right"> {{ timeWithoutMillisecondsOrSeconds(message.time) }}
               </div>
             </div>
           </div>
