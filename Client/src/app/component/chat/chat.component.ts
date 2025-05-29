@@ -1,12 +1,12 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ChatDto, MessageDto } from "../../dto/chat.dto";
-import { ChatService } from "../../service/chat.service";
-import { AuthService } from "../../service/auth.service";
-import { UserService } from "../../service/user.service";
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChatDto, MessageDto} from "../../dto/chat.dto";
+import {ChatService} from "../../service/chat.service";
+import {AuthService} from "../../service/auth.service";
+import {UserService} from "../../service/user.service";
+import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import SockJS from 'sockjs-client';
-import { NotificationDto } from "../../dto/notification.dto";
-import { Client } from "@stomp/stompjs";
+import {NotificationDto} from "../../dto/notification.dto";
+import {Client} from "@stomp/stompjs";
 
 @Component({
   selector: 'app-chat',
@@ -111,7 +111,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   sendMessage() {
     if (this.messageInput !== '') {
-      this.chatService.sendMessage({ content: this.messageInput, recipient: this.chatRoom.secondUser }).subscribe({
+      this.chatService.sendMessage({content: this.messageInput, recipient: this.chatRoom.secondUser}).subscribe({
         next: value => {
           const chat = this.chats.find(chat => chat.id === value.id);
           if (!chat) {
@@ -142,26 +142,23 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   timeWithoutMillisecondsOrSeconds(time: string[]) {
-    return `${time[0]}:${time[1]}`;
+    const hours = String(time[0]).padStart(2, '0');
+    const minutes = String(time[1]).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 
   private groupByDate(messages: MessageDto[]): { [key: string]: MessageDto[] } {
     const grouped: { [key: string]: MessageDto[] } = {};
 
     for (const message of messages) {
-      const dateKey = String(message.date.slice().reverse()).replaceAll(',', '.');
+      const dateKey = String(message.date.slice()).replaceAll(',', '.');
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }
       grouped[dateKey].push(message);
     }
 
-    const sortedGrouped: { [key: string]: MessageDto[] } = {};
-    Object.keys(grouped).sort().forEach(key => {
-      sortedGrouped[key] = grouped[key];
-    });
-
-    return sortedGrouped;
+    return grouped;
   }
 
   loadNewUsers() {

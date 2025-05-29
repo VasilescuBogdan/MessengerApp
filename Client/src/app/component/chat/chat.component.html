@@ -40,9 +40,10 @@
         </div>
         <div class="border-t-white border"></div>
       </div>
-      <div #messageContainer class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
+      <div #messageContainer
+           class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
         <div class="m-2" *ngFor="let group of chatRoom.messages | keyvalue">
-          <h2 class="flex justify-center">{{ group.key }}</h2>
+          <h2 class="flex justify-center">{{ group.key | date: 'dd.MM.yyyy' }}</h2>
           <div *ngFor="let message of group.value" class="flex-row flex">
             <div class="mb-2.5 p-2.5 rounded-lg mx-w-md" [ngClass]="{
           'bg-gray-600 ml-auto': message.sender === username,
@@ -57,7 +58,8 @@
         </div>
       </div>
       <div class="bg-zinc-500 container">
-        <mat-form-field class="p-auto w-full bg-gray-600 focus:outline-none focus:underline-offset-0" subscriptSizing="dynamic">
+        <mat-form-field class="p-auto w-full bg-gray-600 focus:outline-none focus:underline-offset-0"
+                        subscriptSizing="dynamic">
           <textarea [(ngModel)]="messageInput" matInput cdkTextareaAutosize
                     cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
                     class="p-1 min-h-[1rem] h-auto resize-y overflow-hidden transition-all duration-200
