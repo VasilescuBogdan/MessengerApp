@@ -25,8 +25,8 @@ export class GroupChatService {
     return this.http.put(`${this.baseURL}/addUser/${groupChatId}?user=${username}`, null);
   }
 
-  public removeUserFromGroupChat(groupChatId: string, username: string) {
-    return this.http.put(`${this.baseURL}/removeUser/${groupChatId}?user=${username}`, null);
+  public removeUserFromGroupChat(groupChatId: string) {
+    return this.http.put(`${this.baseURL}/removeUser/${groupChatId}`, null);
   }
 
   public sendMessageToGroupChat(message: AddMessageDto) {

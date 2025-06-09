@@ -36,8 +36,8 @@ public class GroupChatController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/removeUser/{groupId}")
-    public void removeUserFromGroupChat(@PathVariable("groupId") String groupId, @RequestParam("user") String username) {
-        groupChatService.removeUserFromGroupChat(groupId, username);
+    public void removeUserFromGroupChat(@PathVariable("groupId") String groupId, Principal principal) {
+        groupChatService.removeUserFromGroupChat(groupId, principal.getName());
     }
 
     @ResponseStatus(HttpStatus.OK)

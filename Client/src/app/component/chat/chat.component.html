@@ -4,15 +4,16 @@
     <!-- List header -->
     <div class="p-5 flex">
       <p class="font-semibold font-sans text-6xl"> {{ username }} </p>
+      <span class="flex-auto"></span>
       <div>
-        <button *ngIf="users.length > 0" mat-mini-fab [matMenuTriggerFor]="menu">
+        <button *ngIf="getAllUsersWithoutChatWithLoggedUser().length > 0" mat-fab [matMenuTriggerFor]="userToChatMenu">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab (click)="openAddGroupDialog()">
+        <button mat-mini-fab color="primary" (click)="openAddGroupDialog()">
           <mat-icon>group</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
-          <ng-container *ngFor="let user of users">
+        <mat-menu #userToChatMenu="matMenu">
+          <ng-container *ngFor="let user of getAllUsersWithoutChatWithLoggedUser()">
             <button mat-menu-item (click)="addChat(user)">
               {{ user }}
             </button>
@@ -45,15 +46,15 @@
       <mat-list-item mat-list-item (click)="showGroupChat(group)"
                      class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300"
                      [ngClass]="{'bg-gray-500': group.id === chatRoom.id}">
-      <div class="flex justify-normal">
-        <div
-          class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
-          {{ group.name.substring(0, 1).toUpperCase() }}
+        <div class="flex justify-normal">
+          <div
+            class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
+            {{ group.name.substring(0, 1).toUpperCase() }}
+          </div>
+          <p class="text-4xl mx-3">
+            {{ group.name }}
+          </p>
         </div>
-        <p class="text-4xl mx-3">
-          {{ group.name }}
-        </p>
-      </div>
       </mat-list-item>
     </mat-list>
   </mat-sidenav>
@@ -66,6 +67,22 @@
       <div class="sticky top-0 z-50">
         <div class="p-5 flex bg-angular-primary">
           <p class="font-semibold text-white font-sans text-6xl"> {{ chatRoom.name }} </p>
+          <span class="flex-auto"></span>
+          <div *ngIf="chatRoom.type === 'group'">
+            <button *ngIf="getUsersNotInChat().length > 0" mat-mini-fab color="accent" [matMenuTriggerFor]="addUserToGroupMenu">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" (click)="removeUserFromGroup()">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-menu #addUserToGroupMenu="matMenu">
+              <ng-container *ngFor="let user of getUsersNotInChat()">
+                <button mat-menu-item (click)="addUserToGroup(user)">
+                  {{ user }}
+                </button>
+              </ng-container>
+            </mat-menu>
+          </div>
         </div>
         <div class="border-t-white border"></div>
       </div>
@@ -78,7 +95,7 @@
           <div *ngFor="let message of group.value" class="flex-row flex">
             <div class="mb-2.5 p-2.5 rounded-lg mx-w-md" [ngClass]="{
           'bg-gray-600 ml-auto': message.sender === username,
-          'bg-angular-primary': message.sender === chatRoom.name
+          'bg-angular-primary': message.sender !== username
           }">
               <p>{{ message.content }}</p>
               <div

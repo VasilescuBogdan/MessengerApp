@@ -117,13 +117,48 @@ export class ChatComponent implements OnInit, OnDestroy {
   loadNewUsers() {
     this.userService.getAllUsers().subscribe({
       next: value => {
-        this.users = value.filter(user => {
-          if (user === this.username) {
-            return false;
-          }
-          return !this.chats.map(chat => this.findSecondUser(chat))
-            .includes(user);
-        });
+        this.users = value;
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
+  }
+
+  addUserToGroup(user: string) {
+    this.groupChatService.addUserToGroupChat(this.chatRoom.id, user).subscribe({
+      next: () => {
+        window.alert(`user ${user} added to group successfully`);
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  getUsersNotInChat() {
+    const groupChat = this.groups.find((group) => group.id === this.chatRoom.id);
+    if (groupChat) {
+      return this.users.filter((user) => !groupChat.users.includes(user));
+    }
+    return [];
+  }
+
+  getAllUsersWithoutChatWithLoggedUser() {
+    return this.users.filter((user) => user !== this.username && !this.hasChatWithUser().includes(user));
+  }
+
+  removeUserFromGroup() {
+    this.groupChatService.removeUserFromGroupChat(this.chatRoom.id).subscribe({
+      next: () => {
+        window.alert(`You exited from group successfully`);
+        this.chatRoom = {
+          id: '',
+          type: '',
+          name: '',
+          messages: {},
+        };
+        this.getAllChats();
       },
       error: err => {
         console.log(err);
@@ -272,5 +307,14 @@ export class ChatComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     })
+  }
+
+
+  private hasChatWithUser() {
+    let usersWithChat: string[] = [];
+    for (const chat of this.chats) {
+      usersWithChat.push(this.findSecondUser(chat));
+    }
+    return usersWithChat;
   }
 }
