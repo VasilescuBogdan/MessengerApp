@@ -1,4 +1,4 @@
-import { MessageDto } from "./chat.dto";
+import { MessageDto } from "./message.dto";
 
 export interface NotificationDto {
   chatId: string;

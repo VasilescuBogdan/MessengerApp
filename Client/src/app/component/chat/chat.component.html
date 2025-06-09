@@ -1,10 +1,15 @@
+<!-- Sidenav for displaying chat list and groups -->
 <mat-sidenav-container class="mt-5 mx-32 h-[calc(100vh-6rem)]">
   <mat-sidenav mode="side" opened class="w-1/5">
+    <!-- List header -->
     <div class="p-5 flex">
       <p class="font-semibold font-sans text-6xl"> {{ username }} </p>
-      <div *ngIf="users.length > 0">
-        <button mat-fab [matMenuTriggerFor]="menu">
+      <div>
+        <button *ngIf="users.length > 0" mat-mini-fab [matMenuTriggerFor]="menu">
           <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="openAddGroupDialog()">
+          <mat-icon>group</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
           <ng-container *ngFor="let user of users">
@@ -16,6 +21,8 @@
       </div>
     </div>
     <div class="border-t-white border"></div>
+
+    <!-- Chat list -->
     <mat-list *ngFor="let chat of chats">
       <mat-list-item mat-list-item (click)="showChat(chat)"
                      [ngClass]="{'bg-gray-500': chat.id === chatRoom.id}"
@@ -31,15 +38,39 @@
         </div>
       </mat-list-item>
     </mat-list>
+
+    <!-- Group list -->
+    <h1 *ngIf="groups.length !== 0">Groups</h1>
+    <mat-list *ngFor="let group of groups">
+      <mat-list-item mat-list-item (click)="showGroupChat(group)"
+                     class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300"
+                     [ngClass]="{'bg-gray-500': group.id === chatRoom.id}">
+      <div class="flex justify-normal">
+        <div
+          class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
+          {{ group.name.substring(0, 1).toUpperCase() }}
+        </div>
+        <p class="text-4xl mx-3">
+          {{ group.name }}
+        </p>
+      </div>
+      </mat-list-item>
+    </mat-list>
   </mat-sidenav>
+
+  <!-- Main content area for displaying messages -->
   <mat-sidenav-content>
     <div *ngIf="userSelected()" class="flex flex-col h-full">
+
+      <!-- Header for the chat room -->
       <div class="sticky top-0 z-50">
         <div class="p-5 flex bg-angular-primary">
-          <p class="font-semibold text-white font-sans text-6xl"> {{ chatRoom.secondUser }} </p>
+          <p class="font-semibold text-white font-sans text-6xl"> {{ chatRoom.name }} </p>
         </div>
         <div class="border-t-white border"></div>
       </div>
+
+      <!-- Message container -->
       <div #messageContainer
            class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
         <div class="m-2" *ngFor="let group of chatRoom.messages | keyvalue">
@@ -47,7 +78,7 @@
           <div *ngFor="let message of group.value" class="flex-row flex">
             <div class="mb-2.5 p-2.5 rounded-lg mx-w-md" [ngClass]="{
           'bg-gray-600 ml-auto': message.sender === username,
-          'bg-angular-primary': message.sender === chatRoom.secondUser
+          'bg-angular-primary': message.sender === chatRoom.name
           }">
               <p>{{ message.content }}</p>
               <div
@@ -57,6 +88,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Input field for sending messages -->
       <div class="bg-zinc-500 container">
         <mat-form-field class="p-auto w-full bg-gray-600 focus:outline-none focus:underline-offset-0"
                         subscriptSizing="dynamic">
@@ -72,4 +105,5 @@
       </div>
     </div>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

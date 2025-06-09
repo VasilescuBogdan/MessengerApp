@@ -1,8 +1,8 @@
 import { MessageDto } from "./message.dto";
 
-export interface ChatDto {
+export interface GroupDto {
+  name: string;
   id: string;
-  firstUser: string;
-  secondUser: string;
+  users: string[];
   messages: MessageDto[];
 }

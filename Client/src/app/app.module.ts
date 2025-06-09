@@ -18,6 +18,8 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { AuthInterceptor } from "./security/auth.interceptor";
 import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
+import { AddGroupDialogComponent } from './component/add-group-dialog/add-group-dialog.component';
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { MatMenuModule } from "@angular/material/menu";
     LoginRegisterComponent,
     HeadderComponent,
     ChatComponent,
-    SettingsComponent
+    SettingsComponent,
+    AddGroupDialogComponent
   ],
   imports: [
     HttpClientModule,
@@ -35,6 +38,7 @@ import { MatMenuModule } from "@angular/material/menu";
     MatInputModule,
     MatButtonModule,
     MatToolbarModule,
+    MatDialogModule,
     MatIconModule,
     MatSidenavModule,
     MatListModule,

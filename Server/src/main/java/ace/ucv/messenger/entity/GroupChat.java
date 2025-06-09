@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -13,15 +13,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "chat")
-public class Chat {
+@Document(collection = "group_chat")
+public class GroupChat {
 
     @Id
     private String id;
 
-    private String firstUser;
+    private String name;
 
-    private String secondUser;
+    private List<String> users;
 
     private List<Message> messages;
 }
