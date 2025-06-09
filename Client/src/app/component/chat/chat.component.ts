@@ -65,8 +65,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatRoom.messages = this.groupByDate(chat.messages);
       this.chatRoom.name = this.findSecondUser(chat);
       this.chatRoom.type = 'private';
-      this.scrollToBottom();
     }
+    this.scrollToBottom();
   }
 
   showGroupChat(group: GroupDto) {
@@ -251,6 +251,26 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private sendMessageToGroup() {
-
+    this.groupChatService.sendMessageToGroupChat({content: this.messageInput, recipient: this.chatRoom.id}).subscribe({
+      next: value => {
+        const group = this.groups.find(group => group.id === value.id);
+        if (!group) {
+          this.groups.push(value);
+          this.chatRoom = {
+            id: value.id,
+            type: 'group',
+            messages: this.groupByDate(value.messages),
+            name: value.name,
+          }
+        } else {
+          group.messages = value.messages;
+          this.chatRoom.messages = this.groupByDate(group.messages);
+        }
+        this.scrollToBottom();
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
   }
 }

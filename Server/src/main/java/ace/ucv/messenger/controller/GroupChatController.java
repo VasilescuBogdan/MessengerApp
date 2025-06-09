@@ -48,7 +48,7 @@ public class GroupChatController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addMessage")
-    public GroupChat addMessage(Principal principal, AddMessageDto addMessageDto) {
+    public GroupChat addMessage(Principal principal, @RequestBody AddMessageDto addMessageDto) {
         return groupChatService.addMessage(principal, addMessageDto);
     }
 }

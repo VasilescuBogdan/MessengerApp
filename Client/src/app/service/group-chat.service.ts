@@ -30,6 +30,6 @@ export class GroupChatService {
   }
 
   public sendMessageToGroupChat(message: AddMessageDto) {
-    return this.http.post(`${this.baseURL}/addMessage`, message);
+    return this.http.post<GroupChatDto>(`${this.baseURL}/addMessage`, message);
   }
 }
