@@ -19,10 +19,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GroupChatServiceImpl implements GroupChatService {
-
     private static final String GROUP_CHAT_NOT_FOUND_MESSAGE = "Group chat not found";
     private final GroupChatRepository groupChatRepository;
-
     private final NotificationService notificationService;
 
     @Override
@@ -74,5 +72,13 @@ public class GroupChatServiceImpl implements GroupChatService {
             notificationService.sendNotification(user, notification);
         }
         return groupChatRepository.save(groupChat);
+    }
+
+    @Override
+    public void changeGroupChatName(String groupId, String newName) {
+        GroupChat groupChat = groupChatRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException(GROUP_CHAT_NOT_FOUND_MESSAGE));
+        groupChat.setName(newName);
+        groupChatRepository.save(groupChat);
     }
 }

@@ -24,6 +24,7 @@ import { ChangePasswordDialogComponent } from './component/change-password-dialo
 import { ChangeEmailDialogComponent } from './component/change-email-dialog/change-email-dialog.component';
 import { ChangePhoneDialogComponent } from './component/change-phone-dialog/change-phone-dialog.component';
 import { ChangeUsernameDialogComponent } from './component/change-username-dialog/change-username-dialog.component';
+import { ChangeGroupNameDialogComponent } from './component/change-group-name-dialog/change-group-name-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ChangeUsernameDialogComponent } from './component/change-username-dialo
     ChangePasswordDialogComponent,
     ChangeEmailDialogComponent,
     ChangePhoneDialogComponent,
-    ChangeUsernameDialogComponent
+    ChangeUsernameDialogComponent,
+    ChangeGroupNameDialogComponent
   ],
   imports: [
     HttpClientModule,

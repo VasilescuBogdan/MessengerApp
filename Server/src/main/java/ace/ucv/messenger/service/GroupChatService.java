@@ -17,4 +17,6 @@ public interface GroupChatService {
     List<GroupChat> findAllGroupChats(String username);
 
     GroupChat addMessage(Principal principal, AddMessageDto addMessageDto);
+
+    void changeGroupChatName(String groupId, String newName);
 }

@@ -76,6 +76,9 @@
             <button mat-mini-fab class="ms-2" color="accent" (click)="removeUserFromGroup()">
               <mat-icon>close</mat-icon>
             </button>
+            <button mat-mini-fab class="ms-2" color="accent" (click)="openChangeGroupNameDialog()">
+              <mat-icon>settings</mat-icon>
+            </button>
             <mat-menu #addUserToGroupMenu="matMenu">
               <ng-container *ngFor="let user of getUsersNotInChat()">
                 <button mat-menu-item (click)="addUserToGroup(user)">

@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Change name</h1>
+<form [formGroup]="changeNameForm" (ngSubmit)="changeGroupName()">
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>Enter group name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" [disabled]="changeNameForm.invalid">
+      Add
+    </button>
+  </mat-dialog-actions>
+</form>

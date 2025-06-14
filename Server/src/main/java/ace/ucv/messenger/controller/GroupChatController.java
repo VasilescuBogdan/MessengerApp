@@ -51,4 +51,10 @@ public class GroupChatController {
     public GroupChat addMessage(Principal principal, @RequestBody AddMessageDto addMessageDto) {
         return groupChatService.addMessage(principal, addMessageDto);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/changeName/{groupId}")
+    public void changeGroupChatName(@PathVariable("groupId") String groupId, @RequestParam("name") String newName) {
+        groupChatService.changeGroupChatName(groupId, newName);
+    }
 }

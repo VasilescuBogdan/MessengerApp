@@ -13,6 +13,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AddGroupDialogComponent } from "../add-group-dialog/add-group-dialog.component";
 import { GroupChatService } from "../../service/group-chat.service";
 import { GroupChatDto } from "../../dto/group-chat.dto";
+import { ChangeGroupNameDialogComponent } from "../change-group-name-dialog/change-group-name-dialog.component";
 
 @Component({
   selector: 'app-chat',
@@ -167,6 +168,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     })
   }
 
+  openChangeGroupNameDialog() {
+    const dialogRef = this.dialog.open(ChangeGroupNameDialogComponent, {
+      data: {
+        groupName: this.chatRoom.name,
+        groupId: this.chatRoom.id
+      }
+    });
+    dialogRef.afterClosed().subscribe((newName: string) => {
+      this.getAllGroups();
+      this.chatRoom.name = newName;
+    })
+  }
+
   ngOnDestroy(): void {
     if (this.stompClient !== null) {
       this.stompClient.disconnect();
@@ -204,7 +218,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         const subUrl = `/users/${this.username}/chat`;
         this.notificationSubscription = this.stompClient.subscribe(subUrl, (message: { body: string; }) => {
           const notification: NotificationDto = JSON.parse(message.body);
-          if(this.chatRoom.type === 'private') {
+          if (this.chatRoom.type === 'private') {
             this.handleNotification(notification, this.chats);
           }
           if (this.chatRoom.type === 'group') {
@@ -293,6 +307,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+
   private sendMessageToGroup() {
     this.groupChatService.sendMessageToGroupChat({content: this.messageInput, recipient: this.chatRoom.id}).subscribe({
       next: value => {
@@ -316,7 +331,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       }
     })
   }
-
 
   private hasChatWithUser() {
     let usersWithChat: string[] = [];

@@ -32,4 +32,8 @@ export class GroupChatService {
   public sendMessageToGroupChat(message: AddMessageDto) {
     return this.http.post<GroupChatDto>(`${this.baseURL}/addMessage`, message);
   }
+
+  public changeGroupName(groupId: string, newName: string) {
+    return this.http.put(`${this.baseURL}/changeName/${groupId}?name=${newName}`, null);
+  }
 }
