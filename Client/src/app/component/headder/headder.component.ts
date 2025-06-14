@@ -13,5 +13,6 @@ export class HeadderComponent {
 
   logout() {
     this.authService.clear();
+    window.location.reload();
   }
 }

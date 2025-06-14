@@ -5,11 +5,11 @@
     <div class="p-5 flex">
       <p class="font-semibold font-sans text-6xl"> {{ username }} </p>
       <span class="flex-auto"></span>
-      <div>
-        <button *ngIf="getAllUsersWithoutChatWithLoggedUser().length > 0" mat-fab [matMenuTriggerFor]="userToChatMenu">
+      <div class="mt-3">
+        <button color="primary" *ngIf="getAllUsersWithoutChatWithLoggedUser().length > 0" mat-mini-fab [matMenuTriggerFor]="userToChatMenu">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab color="primary" (click)="openAddGroupDialog()">
+        <button mat-mini-fab class="ms-2" color="primary" (click)="openAddGroupDialog()">
           <mat-icon>group</mat-icon>
         </button>
         <mat-menu #userToChatMenu="matMenu">
@@ -68,11 +68,12 @@
         <div class="p-5 flex bg-angular-primary">
           <p class="font-semibold text-white font-sans text-6xl"> {{ chatRoom.name }} </p>
           <span class="flex-auto"></span>
-          <div *ngIf="chatRoom.type === 'group'">
-            <button *ngIf="getUsersNotInChat().length > 0" mat-mini-fab color="accent" [matMenuTriggerFor]="addUserToGroupMenu">
+          <div *ngIf="chatRoom.type === 'group'" class="mt-3">
+            <button *ngIf="getUsersNotInChat().length > 0" mat-mini-fab color="accent"
+                    [matMenuTriggerFor]="addUserToGroupMenu">
               <mat-icon>add</mat-icon>
             </button>
-            <button mat-mini-fab color="accent" (click)="removeUserFromGroup()">
+            <button mat-mini-fab class="ms-2" color="accent" (click)="removeUserFromGroup()">
               <mat-icon>close</mat-icon>
             </button>
             <mat-menu #addUserToGroupMenu="matMenu">
@@ -97,6 +98,7 @@
           'bg-gray-600 ml-auto': message.sender === username,
           'bg-angular-primary': message.sender !== username
           }">
+              <p *ngIf="message.sender !== username && chatRoom.type === 'group'" class="font-bold">{{ message.sender }}</p>
               <p>{{ message.content }}</p>
               <div
                 class="text-xs text-gray-400 mt-1.5 text-right"> {{ timeWithoutMillisecondsOrSeconds(message.time) }}

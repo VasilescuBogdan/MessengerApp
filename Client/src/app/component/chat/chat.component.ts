@@ -12,6 +12,7 @@ import { GroupDto } from "../../dto/group.dto";
 import { MatDialog } from "@angular/material/dialog";
 import { AddGroupDialogComponent } from "../add-group-dialog/add-group-dialog.component";
 import { GroupChatService } from "../../service/group-chat.service";
+import { GroupChatDto } from "../../dto/group-chat.dto";
 
 @Component({
   selector: 'app-chat',
@@ -203,7 +204,12 @@ export class ChatComponent implements OnInit, OnDestroy {
         const subUrl = `/users/${this.username}/chat`;
         this.notificationSubscription = this.stompClient.subscribe(subUrl, (message: { body: string; }) => {
           const notification: NotificationDto = JSON.parse(message.body);
-          this.handleNotification(notification);
+          if(this.chatRoom.type === 'private') {
+            this.handleNotification(notification, this.chats);
+          }
+          if (this.chatRoom.type === 'group') {
+            this.handleNotification(notification, this.groups);
+          }
         });
       },
       onStompError: (frame) => {
@@ -224,6 +230,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   private groupByDate(messages: MessageDto[]): { [key: string]: MessageDto[] } {
     const grouped: { [key: string]: MessageDto[] } = {};
 
+    messages.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
     for (const message of messages) {
       const dateKey = String(message.date.slice()).replaceAll(',', '.');
       if (!grouped[dateKey]) {
@@ -235,11 +243,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     return grouped;
   }
 
-  private handleNotification(notification: NotificationDto) {
+  private handleNotification(notification: NotificationDto, chatList: ChatDto[] | GroupChatDto[]) {
     if (!notification) {
       return;
     }
-    const chat = this.chats.find(chat => chat.id === notification.chatId)
+    const chat = (chatList as (ChatDto | GroupChatDto)[]).find(chat => chat.id === notification.chatId);
     if (chat) {
       chat.messages.push(notification.message);
       if (this.chatRoom.id === chat.id) {
