@@ -1,5 +1,6 @@
 package ace.ucv.messenger.controller;
 
+import ace.ucv.messenger.dto.ChangePasswordDto;
 import ace.ucv.messenger.dto.LoginRequest;
 import ace.ucv.messenger.dto.LoginResponse;
 import ace.ucv.messenger.dto.RegisterRequest;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,5 +39,11 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     public List<String> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @PutMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public void changePassword(@RequestBody ChangePasswordDto changePasswordDto, Principal principal) {
+        userService.changePassword(changePasswordDto, principal.getName());
     }
 }

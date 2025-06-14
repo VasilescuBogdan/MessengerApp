@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { ChangePasswordDto } from "../dto/change-password.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -12,5 +13,9 @@ export class UserService {
 
   getAllUsers() {
     return this.http.get<string[]>(this.BASE_URL);
+  }
+
+  changePassword(changePasswordDto: ChangePasswordDto) {
+    return this.http.put(`${this.BASE_URL}/password`, changePasswordDto);
   }
 }

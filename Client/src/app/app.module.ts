@@ -9,7 +9,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HeadderComponent } from './component/headder/headder.component';
+import { HeaderComponent } from './component/headder/header.component';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { ChatComponent } from './component/chat/chat.component';
@@ -20,15 +20,17 @@ import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { AddGroupDialogComponent } from './component/add-group-dialog/add-group-dialog.component';
 import { MatDialogModule } from "@angular/material/dialog";
+import { ChangePasswordDialogComponent } from './component/change-password-dialog/change-password-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginRegisterComponent,
-    HeadderComponent,
+    HeaderComponent,
     ChatComponent,
     SettingsComponent,
-    AddGroupDialogComponent
+    AddGroupDialogComponent,
+    ChangePasswordDialogComponent
   ],
   imports: [
     HttpClientModule,

@@ -37,7 +37,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private notificationSubscription: any;
 
   constructor(private chatService: ChatService, private authService: AuthService, private userService: UserService,
-              private addGroupDialog: MatDialog, private groupChatService: GroupChatService) {
+              private dialog: MatDialog, private groupChatService: GroupChatService) {
     this.chatRoom = {
       id: '',
       type: '',
@@ -103,7 +103,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   openAddGroupDialog() {
-    const dialogRef = this.addGroupDialog.open(AddGroupDialogComponent);
+    const dialogRef = this.dialog.open(AddGroupDialogComponent);
     dialogRef.afterClosed().subscribe(() => {
       this.getAllChats();
     })
