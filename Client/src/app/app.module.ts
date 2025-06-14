@@ -9,7 +9,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HeaderComponent } from './component/headder/header.component';
+import { HeaderComponent } from './component/header/header.component';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { ChatComponent } from './component/chat/chat.component';
@@ -23,6 +23,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from './component/change-password-dialog/change-password-dialog.component';
 import { ChangeEmailDialogComponent } from './component/change-email-dialog/change-email-dialog.component';
 import { ChangePhoneDialogComponent } from './component/change-phone-dialog/change-phone-dialog.component';
+import { ChangeUsernameDialogComponent } from './component/change-username-dialog/change-username-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ChangePhoneDialogComponent } from './component/change-phone-dialog/chan
     AddGroupDialogComponent,
     ChangePasswordDialogComponent,
     ChangeEmailDialogComponent,
-    ChangePhoneDialogComponent
+    ChangePhoneDialogComponent,
+    ChangeUsernameDialogComponent
   ],
   imports: [
     HttpClientModule,

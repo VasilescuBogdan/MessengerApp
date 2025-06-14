@@ -31,4 +31,8 @@ export class UserService {
   changePhone(newPhone: string) {
     return this.http.put(`${this.BASE_URL}/phone?newPhone=${newPhone}`, null);
   }
+
+  changeUsername(newUsername: string) {
+    return this.http.put(`${this.BASE_URL}/username?newUsername=${newUsername}`, null);
+  }
 }

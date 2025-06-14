@@ -4,6 +4,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from "../change-password-dialog/change-password-dialog.component";
 import { ChangeEmailDialogComponent } from "../change-email-dialog/change-email-dialog.component";
 import { ChangePhoneDialogComponent } from "../change-phone-dialog/change-phone-dialog.component";
+import { ChangeUsernameDialogComponent } from "../change-username-dialog/change-username-dialog.component";
 
 @Component({
   selector: 'app-header',
@@ -20,15 +21,19 @@ export class HeaderComponent {
     window.location.reload();
   }
 
-  openNewPasswordDialog() {
+  openChangePasswordDialog() {
     this.dialog.open(ChangePasswordDialogComponent);
   }
 
-  openNewEmailDialog() {
+  openChangeEmailDialog() {
     this.dialog.open(ChangeEmailDialogComponent);
   }
 
-  openNewPhoneDialog() {
+  openChangePhoneDialog() {
     this.dialog.open(ChangePhoneDialogComponent);
+  }
+
+  openChangeUsernameDialog() {
+    this.dialog.open(ChangeUsernameDialogComponent);
   }
 }

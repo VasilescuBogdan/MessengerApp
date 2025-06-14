@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../service/user.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -8,7 +8,7 @@ import { MatDialogRef } from "@angular/material/dialog";
   templateUrl: './change-phone-dialog.component.html',
   styleUrls: ['./change-phone-dialog.component.css']
 })
-export class ChangePhoneDialogComponent {
+export class ChangePhoneDialogComponent implements OnInit {
 
   constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangePhoneDialogComponent>) {
   }

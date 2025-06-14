@@ -9,14 +9,17 @@
       <mat-icon>logout</mat-icon>
     </button>
     <mat-menu #settingsMenu="matMenu">
-      <button mat-menu-item (click)="openNewPasswordDialog()">
+      <button mat-menu-item (click)="openChangePasswordDialog()">
         <span>Change password</span>
       </button>
-      <button mat-menu-item (click)="openNewEmailDialog()">
+      <button mat-menu-item (click)="openChangeEmailDialog()">
         <span>Change email</span>
       </button>
-      <button mat-menu-item (click)="openNewPhoneDialog()">
+      <button mat-menu-item (click)="openChangePhoneDialog()">
         <span>Change phone</span>
+      </button>
+      <button mat-menu-item (click)="openChangeUsernameDialog()">
+        <span>Change username</span>
       </button>
     </mat-menu>
   </mat-toolbar>

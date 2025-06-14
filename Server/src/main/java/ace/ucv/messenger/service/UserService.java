@@ -15,4 +15,6 @@ public interface UserService {
     void changeEmail(String newEmail, String username);
 
     void changePhone(String newPhone, String name);
+
+    void changeUsername(String newUsername, String username);
 }

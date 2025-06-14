@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>New username</h1>
+<form [formGroup]="changeUsernameForm" (ngSubmit)="changeUsername()">
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>Enter new username</mat-label>
+      <input matInput formControlName="username">
+    </mat-form-field>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="changeUsernameForm.invalid">
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</form>

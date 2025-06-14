@@ -66,4 +66,11 @@ public class UserController {
     public void changePhone(@RequestParam("newPhone") String newPhone, Principal principal) {
         userService.changePhone(newPhone, principal.getName());
     }
+
+    @PutMapping("/username")
+    @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "Bearer Authentication")
+    public void changeUsername(@RequestParam("newUsername") String newUsername, Principal principal) {
+        userService.changeUsername(newUsername, principal.getName());
+    }
 }

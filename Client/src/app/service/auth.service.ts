@@ -23,6 +23,10 @@ export class AuthService {
     localStorage.setItem('username', username);
   }
 
+  public setUsername(username: string) {
+    localStorage.setItem('username', username);
+  }
+
   public getToken() {
     return localStorage.getItem('jwtToken') ?? '{}';
   }
