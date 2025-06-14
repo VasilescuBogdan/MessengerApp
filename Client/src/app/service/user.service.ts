@@ -27,4 +27,8 @@ export class UserService {
   changeEmail(newEmail: string) {
     return this.http.put(`${this.BASE_URL}/email?newEmail=${newEmail}`, null);
   }
+
+  changePhone(newPhone: string) {
+    return this.http.put(`${this.BASE_URL}/phone?newPhone=${newPhone}`, null);
+  }
 }

@@ -22,6 +22,7 @@ import { AddGroupDialogComponent } from './component/add-group-dialog/add-group-
 import { MatDialogModule } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from './component/change-password-dialog/change-password-dialog.component';
 import { ChangeEmailDialogComponent } from './component/change-email-dialog/change-email-dialog.component';
+import { ChangePhoneDialogComponent } from './component/change-phone-dialog/change-phone-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ChangeEmailDialogComponent } from './component/change-email-dialog/chan
     SettingsComponent,
     AddGroupDialogComponent,
     ChangePasswordDialogComponent,
-    ChangeEmailDialogComponent
+    ChangeEmailDialogComponent,
+    ChangePhoneDialogComponent
   ],
   imports: [
     HttpClientModule,

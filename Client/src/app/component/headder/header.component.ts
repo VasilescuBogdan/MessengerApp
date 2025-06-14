@@ -3,6 +3,7 @@ import { AuthService } from "../../service/auth.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from "../change-password-dialog/change-password-dialog.component";
 import { ChangeEmailDialogComponent } from "../change-email-dialog/change-email-dialog.component";
+import { ChangePhoneDialogComponent } from "../change-phone-dialog/change-phone-dialog.component";
 
 @Component({
   selector: 'app-header',
@@ -25,5 +26,9 @@ export class HeaderComponent {
 
   openNewEmailDialog() {
     this.dialog.open(ChangeEmailDialogComponent);
+  }
+
+  openNewPhoneDialog() {
+    this.dialog.open(ChangePhoneDialogComponent);
   }
 }

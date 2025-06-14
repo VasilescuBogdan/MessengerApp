@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>New phone number</h1>
+<form [formGroup]="changePhoneForm" (ngSubmit)="changePhone()">
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>Enter new phone</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="changePhoneForm.invalid">
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</form>

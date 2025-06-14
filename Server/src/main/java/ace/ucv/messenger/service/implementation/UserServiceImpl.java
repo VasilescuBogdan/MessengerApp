@@ -60,4 +60,15 @@ public class UserServiceImpl implements UserService {
         user.setEmail(newEmail);
         userRepository.save(user);
     }
+
+    @Override
+    public void changePhone(String newPhone, String username) {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_ERROR_MESSAGE + username));
+        if (userRepository.existsByPhone(newPhone)) {
+            throw new AlreadyExistsException("Phone already in use: " + newPhone);
+        }
+        user.setPhone(newPhone);
+        userRepository.save(user);
+    }
 }

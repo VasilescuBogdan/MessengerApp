@@ -13,4 +13,6 @@ public interface UserService {
     UserCredentialsDto getUserCredentials(String username);
 
     void changeEmail(String newEmail, String username);
+
+    void changePhone(String newPhone, String name);
 }
