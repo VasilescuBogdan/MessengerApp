@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.ResourceAccessException;
 
 @ControllerAdvice
 @ResponseBody
@@ -22,6 +23,12 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = PasswordNotMatchException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage passwordNotMatchException(RuntimeException ex) {
+        return new ErrorMessage(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = ResourceAccessException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage resourceAlreadyExistsException(RuntimeException ex) {
         return new ErrorMessage(ex.getMessage());
     }
 }

@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>New email</h1>
+<form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>Enter new email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="changeEmailForm.invalid">
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</form>

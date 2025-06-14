@@ -21,6 +21,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { AddGroupDialogComponent } from './component/add-group-dialog/add-group-dialog.component';
 import { MatDialogModule } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from './component/change-password-dialog/change-password-dialog.component';
+import { ChangeEmailDialogComponent } from './component/change-email-dialog/change-email-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ChangePasswordDialogComponent } from './component/change-password-dialo
     ChatComponent,
     SettingsComponent,
     AddGroupDialogComponent,
-    ChangePasswordDialogComponent
+    ChangePasswordDialogComponent,
+    ChangeEmailDialogComponent
   ],
   imports: [
     HttpClientModule,

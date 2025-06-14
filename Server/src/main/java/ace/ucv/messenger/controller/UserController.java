@@ -1,9 +1,6 @@
 package ace.ucv.messenger.controller;
 
-import ace.ucv.messenger.dto.ChangePasswordDto;
-import ace.ucv.messenger.dto.LoginRequest;
-import ace.ucv.messenger.dto.LoginResponse;
-import ace.ucv.messenger.dto.RegisterRequest;
+import ace.ucv.messenger.dto.*;
 import ace.ucv.messenger.service.AuthenticationService;
 import ace.ucv.messenger.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,13 +34,29 @@ public class UserController {
 
     @GetMapping()
     @SecurityRequirement(name = "Bearer Authentication")
+    @ResponseStatus(HttpStatus.OK)
     public List<String> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "Bearer Authentication")
     public void changePassword(@RequestBody ChangePasswordDto changePasswordDto, Principal principal) {
         userService.changePassword(changePasswordDto, principal.getName());
+    }
+
+    @GetMapping("/credentials")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ResponseStatus(HttpStatus.OK)
+    public UserCredentialsDto getCurrentUserCredentials(Principal principal) {
+        return userService.getUserCredentials(principal.getName());
+    }
+
+    @PutMapping("/email")
+    @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "Bearer Authentication")
+    public void changeEmail(@RequestParam("newEmail") String newEmail, Principal principal) {
+        userService.changeEmail(newEmail, principal.getName());
     }
 }

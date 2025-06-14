@@ -3,14 +3,17 @@
     <span> Messenger Application </span>
     <span class="flex-auto"></span>
     <button mat-icon-button aria-label="settings button" [matMenuTriggerFor]="settingsMenu">
-      <mat-icon> settings</mat-icon>
+      <mat-icon>settings</mat-icon>
     </button>
     <button mat-icon-button aria-label="logout button" (click)="logout()">
-      <mat-icon> logout</mat-icon>
+      <mat-icon>logout</mat-icon>
     </button>
     <mat-menu #settingsMenu="matMenu">
       <button mat-menu-item (click)="openNewPasswordDialog()">
-        <span> Change password </span>
+        <span>Change password</span>
+      </button>
+      <button mat-menu-item (click)="openNewEmailDialog()">
+        <span>Change email</span>
       </button>
     </mat-menu>
   </mat-toolbar>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from "../../service/auth.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ChangePasswordDialogComponent } from "../change-password-dialog/change-password-dialog.component";
+import { ChangeEmailDialogComponent } from "../change-email-dialog/change-email-dialog.component";
 
 @Component({
   selector: 'app-header',
@@ -20,5 +21,9 @@ export class HeaderComponent {
 
   openNewPasswordDialog() {
     this.dialog.open(ChangePasswordDialogComponent);
+  }
+
+  openNewEmailDialog() {
+    this.dialog.open(ChangeEmailDialogComponent);
   }
 }
