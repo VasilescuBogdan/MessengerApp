@@ -3,6 +3,7 @@ import { UserService } from "../../service/user.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ChangePasswordDto } from "../../dto/change-password.dto";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-password-dialog',
@@ -11,7 +12,8 @@ import { MatDialogRef } from "@angular/material/dialog";
 })
 export class ChangePasswordDialogComponent {
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangePasswordDialogComponent>) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangePasswordDialogComponent>,
+              private snackBar: MatSnackBar) {
   }
 
   changePasswordForm = this.formBuilder.group({
@@ -27,13 +29,17 @@ export class ChangePasswordDialogComponent {
       };
       this.userService.changePassword(changePasswordData).subscribe({
         next: () => {
-          alert("Password changed successfully");
+          this.handleMessage("Password changed successfully");
           this.dialogueRef.close();
         },
         error: (err) => {
-          alert(err.error.message);
+          this.handleMessage(err.error.message);
         }
       });
     }
+  }
+
+  private handleMessage(message: string) {
+    this.snackBar.open(message, '', {duration: 3000});
   }
 }

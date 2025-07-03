@@ -13,7 +13,6 @@ import { HeaderComponent } from './component/header/header.component';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { ChatComponent } from './component/chat/chat.component';
-import { SettingsComponent } from './component/settings/settings.component';
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { AuthInterceptor } from "./security/auth.interceptor";
 import { MatListModule } from "@angular/material/list";
@@ -24,7 +23,10 @@ import { ChangePasswordDialogComponent } from './component/change-password-dialo
 import { ChangeEmailDialogComponent } from './component/change-email-dialog/change-email-dialog.component';
 import { ChangePhoneDialogComponent } from './component/change-phone-dialog/change-phone-dialog.component';
 import { ChangeUsernameDialogComponent } from './component/change-username-dialog/change-username-dialog.component';
-import { ChangeGroupNameDialogComponent } from './component/change-group-name-dialog/change-group-name-dialog.component';
+import {
+  ChangeGroupNameDialogComponent
+} from './component/change-group-name-dialog/change-group-name-dialog.component';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -32,7 +34,6 @@ import { ChangeGroupNameDialogComponent } from './component/change-group-name-di
     LoginRegisterComponent,
     HeaderComponent,
     ChatComponent,
-    SettingsComponent,
     AddGroupDialogComponent,
     ChangePasswordDialogComponent,
     ChangeEmailDialogComponent,
@@ -54,6 +55,7 @@ import { ChangeGroupNameDialogComponent } from './component/change-group-name-di
     MatListModule,
     FormsModule,
     MatMenuModule,
+    MatSnackBarModule,
   ],
   providers: [
     {

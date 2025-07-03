@@ -3,6 +3,7 @@ import { AuthService } from "../../service/auth.service";
 import { UserService } from "../../service/user.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-username-dialog',
@@ -12,7 +13,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 export class ChangeUsernameDialogComponent {
 
   constructor(private authService: AuthService, private userService: UserService, private formBuilder: FormBuilder,
-              private dialogueRef: MatDialogRef<ChangeUsernameDialogComponent>) {
+              private dialogueRef: MatDialogRef<ChangeUsernameDialogComponent>, private snackBar: MatSnackBar) {
   }
 
   changeUsernameForm = this.formBuilder.group({
@@ -24,17 +25,21 @@ export class ChangeUsernameDialogComponent {
       const newUsername = this.changeUsernameForm.value.username;
       this.userService.changeUsername(newUsername).subscribe({
         next: () => {
-          alert("Username changed successfully");
+          this.handleMessage("Username changed successfully");
           this.dialogueRef.close();
           this.authService.clear();
           window.location.reload();
         },
         error: (err) => {
-          alert(err.error.message);
+          this.handleMessage(err.error.message);
         }
       });
     } else {
-      alert("Please enter a valid username address.");
+      this.handleMessage("Please enter a valid username address.");
     }
+  }
+
+  private handleMessage(message: string) {
+    this.snackBar.open(message, '', {duration: 3000});
   }
 }

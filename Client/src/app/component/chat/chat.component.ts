@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatDto } from "../../dto/chat.dto";
 import { ChatService } from "../../service/chat.service";
 import { AuthService } from "../../service/auth.service";
@@ -14,6 +14,7 @@ import { AddGroupDialogComponent } from "../add-group-dialog/add-group-dialog.co
 import { GroupChatService } from "../../service/group-chat.service";
 import { GroupChatDto } from "../../dto/group-chat.dto";
 import { ChangeGroupNameDialogComponent } from "../change-group-name-dialog/change-group-name-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-chat',
@@ -21,7 +22,7 @@ import { ChangeGroupNameDialogComponent } from "../change-group-name-dialog/chan
   styleUrls: ['./chat.component.css'],
   providers: [CdkTextareaAutosize],
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   chats: ChatDto[] = [];
   groups: GroupDto[] = [];
   username = '';
@@ -38,7 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private notificationSubscription: any;
 
   constructor(private chatService: ChatService, private authService: AuthService, private userService: UserService,
-              private dialog: MatDialog, private groupChatService: GroupChatService) {
+              private dialog: MatDialog, private groupChatService: GroupChatService, private snackBar: MatSnackBar) {
     this.chatRoom = {
       id: '',
       type: '',
@@ -51,6 +52,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.username = this.authService.getUsername();
     this.initWebSocket();
     this.getAllChats();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    }, 0);
   }
 
   findSecondUser(chat: ChatDto) {
@@ -125,7 +132,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   addUserToGroup(user: string) {
     this.groupChatService.addUserToGroupChat(this.chatRoom.id, user).subscribe({
       next: () => {
-        window.alert(`user ${user} added to group successfully`);
+        this.errorHandle(`user ${user} added to group successfully`);
       },
       error: err => {
         console.log(err);
@@ -148,7 +155,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   removeUserFromGroup() {
     this.groupChatService.removeUserFromGroupChat(this.chatRoom.id).subscribe({
       next: () => {
-        window.alert(`You exited from group successfully`);
+        this.errorHandle(`You exited from group successfully`);
         this.chatRoom = {
           id: '',
           type: '',
@@ -334,5 +341,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       usersWithChat.push(this.findSecondUser(chat));
     }
     return usersWithChat;
+  }
+
+  private errorHandle(errorMessage: string) {
+    this.snackBar.open(errorMessage, '', {duration: 3000});
   }
 }

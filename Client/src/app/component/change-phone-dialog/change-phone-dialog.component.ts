@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../service/user.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-phone-dialog',
@@ -10,7 +11,8 @@ import { MatDialogRef } from "@angular/material/dialog";
 })
 export class ChangePhoneDialogComponent implements OnInit {
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangePhoneDialogComponent>) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangePhoneDialogComponent>,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -26,26 +28,30 @@ export class ChangePhoneDialogComponent implements OnInit {
       const newPhone = this.changePhoneForm.value.phone;
       this.userService.changePhone(newPhone).subscribe({
         next: () => {
-          alert("Phone changed successfully");
+          this.handleMessage("Phone changed successfully");
           this.dialogueRef.close();
         },
         error: (err) => {
-          alert(err.error.message);
+          this.handleMessage(err.error.message);
         }
       });
     } else {
-      alert("Please enter a valid phone address.");
+      this.handleMessage("Please enter a valid phone number.");
     }
   }
 
   private fetchCurrentPhone() {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        this.changePhoneForm.patchValue({ phone: user.phone });
+        this.changePhoneForm.patchValue({phone: user.phone});
       },
       error: (err) => {
         console.log(err.error.message);
       }
     })
+  }
+
+  handleMessage(message: string) {
+    this.snackBar.open(message, '', {duration: 3000});
   }
 }

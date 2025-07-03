@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../service/user.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-email-dialog',
@@ -9,7 +10,8 @@ import { MatDialogRef } from "@angular/material/dialog";
   styleUrls: ['./change-email-dialog.component.css']
 })
 export class ChangeEmailDialogComponent implements OnInit {
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangeEmailDialogComponent>) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private dialogueRef: MatDialogRef<ChangeEmailDialogComponent>,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -25,7 +27,7 @@ export class ChangeEmailDialogComponent implements OnInit {
       const newEmail = this.changeEmailForm.value.email;
       this.userService.changeEmail(newEmail).subscribe({
         next: () => {
-          alert("Email changed successfully");
+          this.handleMessage("Email changed successfully");
           this.dialogueRef.close();
         },
         error: (err) => {
@@ -33,7 +35,7 @@ export class ChangeEmailDialogComponent implements OnInit {
         }
       });
     } else {
-      alert("Please enter a valid email address.");
+      this.handleMessage("Please enter a valid email address.");
     }
   }
 
@@ -46,5 +48,9 @@ export class ChangeEmailDialogComponent implements OnInit {
         console.log(err.error.message);
       }
     })
+  }
+
+  handleMessage(message: string) {
+    this.snackBar.open(message, '', {duration: 3000});
   }
 }
