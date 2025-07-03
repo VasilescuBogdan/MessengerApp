@@ -1,7 +1,6 @@
 export interface MessageDto {
   content: string;
-  date: string;
-  time: string[];
+  dateTime: Date;
   sender: string;
 }
 

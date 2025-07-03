@@ -101,6 +101,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatRoom.id = '';
     this.chatRoom.messages = {};
     this.chatRoom.name = user;
+    this.chatRoom.type = 'private';
   }
 
   openAddGroupDialog() {
@@ -108,12 +109,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(() => {
       this.getAllChats();
     })
-  }
-
-  timeWithoutMillisecondsOrSeconds(time: string[]) {
-    const hours = String(time[0]).padStart(2, '0');
-    const minutes = String(time[1]).padStart(2, '0');
-    return `${hours}:${minutes}`;
   }
 
   loadNewUsers() {
@@ -193,6 +188,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.getAllChat().subscribe({
       next: (data) => {
         this.chats = data;
+        console.log(data);
         this.loadNewUsers();
         this.getAllGroups();
       },
@@ -244,10 +240,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   private groupByDate(messages: MessageDto[]): { [key: string]: MessageDto[] } {
     const grouped: { [key: string]: MessageDto[] } = {};
 
-    messages.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    messages.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 
     for (const message of messages) {
-      const dateKey = String(message.date.slice()).replaceAll(',', '.');
+      const dateKey = new Date(message.dateTime).toDateString();
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }

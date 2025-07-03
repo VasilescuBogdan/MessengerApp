@@ -11,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +30,7 @@ public class ChatServiceImpl implements ChatService {
         Chat chat = getChat(recipient, username);
         Message newMessage = Message.builder()
                                     .content(messageContent)
-                                    .date(LocalDate.now())
-                                    .time(LocalTime.now())
+                                    .dateTime(LocalDateTime.now())
                                     .sender(username)
                                     .build();
         List<Message> messages = chat.getMessages();

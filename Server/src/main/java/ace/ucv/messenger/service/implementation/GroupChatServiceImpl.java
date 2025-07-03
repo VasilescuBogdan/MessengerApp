@@ -11,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +59,7 @@ public class GroupChatServiceImpl implements GroupChatService {
         Message message = Message.builder()
                 .content(addMessageDto.content())
                 .sender(principal.getName())
-                .date(LocalDate.now())
-                .time(LocalTime.now())
+                .dateTime(LocalDateTime.now())
                 .build();
         groupChat.getMessages().add(message);
         Notification notification = Notification.builder()

@@ -6,7 +6,8 @@
       <p class="font-semibold font-sans text-6xl"> {{ username }} </p>
       <span class="flex-auto"></span>
       <div class="mt-3">
-        <button color="primary" *ngIf="getAllUsersWithoutChatWithLoggedUser().length > 0" mat-mini-fab [matMenuTriggerFor]="userToChatMenu">
+        <button color="primary" *ngIf="getAllUsersWithoutChatWithLoggedUser().length > 0" mat-mini-fab
+                [matMenuTriggerFor]="userToChatMenu">
           <mat-icon>add</mat-icon>
         </button>
         <button mat-mini-fab class="ms-2" color="primary" (click)="openAddGroupDialog()">
@@ -23,40 +24,42 @@
     </div>
     <div class="border-t-white border"></div>
 
-    <!-- Chat list -->
-    <mat-list *ngFor="let chat of chats">
-      <mat-list-item mat-list-item (click)="showChat(chat)"
-                     [ngClass]="{'bg-gray-500': chat.id === chatRoom.id}"
-                     class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300">
-        <div class="flex justify-normal">
-          <div
-            class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
-            {{ findSecondUser(chat).substring(0, 1).toUpperCase() }}
+    <div class="flex-grow overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-600">
+      <!-- Chat list -->
+      <mat-list *ngFor="let chat of chats">
+        <mat-list-item mat-list-item (click)="showChat(chat)"
+                       [ngClass]="{'bg-gray-500': chat.id === chatRoom.id}"
+                       class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300">
+          <div class="flex justify-normal">
+            <div
+              class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
+              {{ findSecondUser(chat).substring(0, 1).toUpperCase() }}
+            </div>
+            <p class="text-4xl mx-3">
+              {{ findSecondUser(chat) }}
+            </p>
           </div>
-          <p class="text-4xl mx-3">
-            {{ findSecondUser(chat) }}
-          </p>
-        </div>
-      </mat-list-item>
-    </mat-list>
+        </mat-list-item>
+      </mat-list>
 
-    <!-- Group list -->
-    <h1 *ngIf="groups.length !== 0">Groups</h1>
-    <mat-list *ngFor="let group of groups">
-      <mat-list-item mat-list-item (click)="showGroupChat(group)"
-                     class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300"
-                     [ngClass]="{'bg-gray-500': group.id === chatRoom.id}">
-        <div class="flex justify-normal">
-          <div
-            class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
-            {{ group.name.substring(0, 1).toUpperCase() }}
+      <!-- Group list -->
+      <h1 *ngIf="groups.length !== 0">Groups</h1>
+      <mat-list *ngFor="let group of groups">
+        <mat-list-item mat-list-item (click)="showGroupChat(group)"
+                       class="hover:bg-gray-500 focus:bg-gray-200 transition-colors duration-300"
+                       [ngClass]="{'bg-gray-500': group.id === chatRoom.id}">
+          <div class="flex justify-normal">
+            <div
+              class="w-12 h-12 bg-angular-primary rounded-full flex justify-center items-center text-white font-bold text-4xl">
+              {{ group.name.substring(0, 1).toUpperCase() }}
+            </div>
+            <p class="text-4xl mx-3">
+              {{ group.name }}
+            </p>
           </div>
-          <p class="text-4xl mx-3">
-            {{ group.name }}
-          </p>
-        </div>
-      </mat-list-item>
-    </mat-list>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </mat-sidenav>
 
   <!-- Main content area for displaying messages -->
@@ -101,10 +104,11 @@
           'bg-gray-600 ml-auto': message.sender === username,
           'bg-angular-primary': message.sender !== username
           }">
-              <p *ngIf="message.sender !== username && chatRoom.type === 'group'" class="font-bold">{{ message.sender }}</p>
+              <p *ngIf="message.sender !== username && chatRoom.type === 'group'"
+                 class="font-bold">{{ message.sender }}</p>
               <p>{{ message.content }}</p>
               <div
-                class="text-xs text-gray-400 mt-1.5 text-right"> {{ timeWithoutMillisecondsOrSeconds(message.time) }}
+                class="text-xs text-gray-400 mt-1.5 text-right"> {{ message.dateTime | date: 'HH:mm' }}
               </div>
             </div>
           </div>
